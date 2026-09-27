@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For You 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========== RESET & BASE ========== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pink: #ff4d6d;
+            --pink-light: #ff758f;
+            --pink-soft: #ffccd5;
+            --peach: #fff0f3;
+            --lavender: #e8d5f5;
+            --white: #ffffff;
+            --text: #4a3728;
+            --text-light: #7a6558;
+            --gold: #ffd60a;
+            --radius: 20px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            background: var(--peach);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ========== FLOATING HEARTS BACKGROUND ========== */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -20px;
+            font-size: 20px;
+            opacity: 0;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* ========== SECTIONS ========== */
+        section {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== SECTION 1: ENTRANCE ========== */
+        .entrance {
+            background: linear-gradient(135deg, #fff0f3 0%, #fce4ec 40%, #f3e5f5 100%);
+        }
+
+        .entrance h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(2rem, 8vw, 4rem);
+            color: var(--pink);
+            margin-bottom: 16px;
+            min-height: 1.3em;
+        }
+
+        .entrance .subtitle {
+            font-size: clamp(1rem, 4vw, 1.4rem);
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 50px;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.5s;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .entrance .subtitle.visible {
+            opacity: 1;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background: var(--pink);
+            animation: blink 0.7s infinite;
+            margin-left: 2px;
+            vertical-align: baseline;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .tap-btn {
+            background: var(--pink);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 8px 30px rgba(255, 77, 109, 0.4);
+            transition: transform 0.2s;
+            opacity: 0;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .tap-btn.visible {
+            opacity: 1;
+        }
+
+        .tap-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 8px 30px rgba(255, 77, 109, 0.4); }
+            50% { box-shadow: 0 8px 50px rgba(255, 77, 109, 0.7); }
+        }
+
+        /* ========== SECTION 2: REASONS ========== */
+        .reasons {
+            background: linear-gradient(180deg, #fce4ec 0%, #fff0f3 50%, #f3e5f5 100%);
+            padding: 60px 20px;
+        }
+
+        .reasons h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            color: var(--pink);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .reason-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 20px rgba(255, 105, 135, 0.1);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reason-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reason-emoji {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .reason-text {
+            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        /* ========== SECTION 3: PROMISES ========== */
+        .promises {
+            background: linear-gradient(180deg, #f3e5f5 0%, #fce4ec 50%, #fff8e1 100%);
+            padding: 60px 20px;
+        }
+
+        .promises h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            color: var(--pink);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .promises .promises-sub {
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .promise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .promise-item {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 105, 135, 0.1);
+            opacity: 0;
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .promise-item:nth-child(odd) {
+            transform: translateX(-40px);
+        }
+
+        .promise-item:nth-child(even) {
+            transform: translateX(40px);
+        }
+
+        .promise-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .promise-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .promise-text {
+            font-size: clamp(1rem, 3.5vw, 1.15rem);
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        /* ========== SECTION 4: THE QUESTION ========== */
+        .question {
+            background: linear-gradient(135deg, #fff0f3 0%, #fce4ec 50%, #f8bbd0 100%);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .question h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.6rem, 7vw, 3rem);
+            color: var(--pink);
+            margin-bottom: 40px;
+            line-height: 1.3;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .question h2.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .question-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            min-height: 150px;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #ff4d6d, #ff758f);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: clamp(1.2rem, 5vw, 1.6rem);
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(255, 77, 109, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: glowPulse 2s ease-in-out infinite;
+            z-index: 10;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .yes-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 8px 30px rgba(255, 77, 109, 0.5); }
+            50% { box-shadow: 0 8px 60px rgba(255, 77, 109, 0.8), 0 0 20px rgba(255, 77, 109, 0.3); }
+        }
+
+        .no-btn {
+            background: #ccc;
+            color: #888;
+            border: none;
+            padding: 12px 28px;
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .no-btn.escaped {
+            position: fixed;
+            transition: left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        top 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        font-size 0.3s ease,
+                        padding 0.3s ease;
+        }
+
+        /* ========== SECTION 5: CELEBRATION ========== */
+        .celebration {
+            background: linear-gradient(135deg, #fff0f3 0%, #fce4ec 30%, #f3e5f5 60%, #fff8e1 100%);
+            display: none;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .celebration.active {
+            display: flex;
+        }
+
+        .celebration h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            color: var(--pink);
+            margin-bottom: 16px;
+            animation: bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .celebration .cel-sub {
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .bear-hug {
+            font-size: clamp(5rem, 20vw, 10rem);
+            margin: 20px 0;
+            animation: hugBounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes hugBounce {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(1.15) rotate(0deg); }
+            75% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .celebration .date-plans {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(255, 105, 135, 0.15);
+            margin: 20px 0;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .date-plans h3 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--pink);
+            font-size: 1.3rem;
+            margin-bottom: 14px;
+        }
+
+        .date-plans p {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 2;
+        }
+
+        .closing {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            color: var(--pink);
+            margin-top: 30px;
+            animation: fadeInUp 1s ease 0.9s both;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== CONFETTI ========== */
+        .confetti-piece {
+            position: fixed;
+            top: -20px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* ========== SCROLL DOWN INDICATOR ========== */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s ease-in-out infinite;
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* ========== DESKTOP TWEAKS ========== */
+        @media (min-width: 768px) {
+            .reasons-grid {
+                grid-template-columns: 1fr 1fr;
+                max-width: 700px;
+            }
+
+            .promise-list {
+                max-width: 600px;
+            }
+
+            section {
+                padding: 80px 40px;
+            }
+        }
+
+        /* ========== EXTRA SMALL SCREENS ========== */
+        @media (max-height: 600px) {
+            section {
+                padding: 30px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating hearts background -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <!-- ===== SECTION 1: ENTRANCE ===== -->
+    <section class="entrance" id="entrance">
+        <h1 id="typewriter"></h1>
+        <p class="subtitle" id="subtitle">Maine ye chhoti si cheez tere liye banayi hai<br>kyunki mujhe kuch bohot zaroori bolna hai... 💌</p>
+        <button class="tap-btn" id="tapBtn" onclick="scrollToSection('reasons')">Dekh na yaar 💗</button>
+        <div class="scroll-indicator">👇</div>
+    </section>
+
+    <!-- ===== SECTION 2: THINGS I LOVE ===== -->
+    <section class="reasons" id="reasons">
+        <h2>Tujhme aisi kya baat hai 💖</h2>
+        <div class="reasons-grid">
+            <div class="reason-card reveal">
+                <span class="reason-emoji">🍦</span>
+                <span class="reason-text">Teri ice cream ki diwangi toh next level hai yaar</span>
+            </div>
+            <div class="reason-card reveal">
+                <span class="reason-emoji">🤗</span>
+                <span class="reason-text">Tere hugs se sach mein sab theek ho jaata hai</span>
+            </div>
+            <div class="reason-card reveal">
+                <span class="reason-emoji">😊</span>
+                <span class="reason-text">Jab tu smile karti hai na, poora room light up ho jaata hai</span>
+            </div>
+            <div class="reason-card reveal">
+                <span class="reason-emoji">💬</span>
+                <span class="reason-text">Tujhse baat karna is literally the best part of my day</span>
+            </div>
+            <div class="reason-card reveal">
+                <span class="reason-emoji">🌙</span>
+                <span class="reason-text">Boring se boring din bhi tere saath magical lag jaata hai</span>
+            </div>
+            <div class="reason-card reveal">
+                <span class="reason-emoji">🧁</span>
+                <span class="reason-text">Tu rasmalai se bhi zyada sweet hai — pakka wala promise</span>
+            </div>
+        </div>
+        <div class="scroll-indicator">👇</div>
+    </section>
+
+    <!-- ===== SECTION 3: PROMISES ===== -->
+    <section class="promises" id="promises">
+        <h2>Agar tu haan bol de toh... 🥺</h2>
+        <p class="promises-sub">Ye raha mera pinky promise 🤞</p>
+        <div class="promise-list">
+            <div class="promise-item reveal">
+                <span class="promise-emoji">🍦🍨</span>
+                <span class="promise-text">Teri favourite ice cream dilaunga — jitne scoops chahiye utne, no limit</span>
+            </div>
+            <div class="promise-item reveal">
+                <span class="promise-emoji">🤗💕</span>
+                <span class="promise-text">Unlimited cuddles aur sabse warm waale hugs — free mein</span>
+            </div>
+            <div class="promise-item reveal">
+                <span class="promise-emoji">🎬🍿</span>
+                <span class="promise-text">Jo tu bolegi wohi dekhenge — tera remote, tera rule</span>
+            </div>
+            <div class="promise-item reveal">
+                <span class="promise-emoji">🌅✨</span>
+                <span class="promise-text">Aur saath mein bohot saari pyaari memories banayenge</span>
+            </div>
+        </div>
+        <div class="scroll-indicator">👇</div>
+    </section>
+
+    <!-- ===== SECTION 4: THE QUESTION ===== -->
+    <section class="question" id="question">
+        <h2 id="questionText" class="reveal">Toh bata na...<br>Mere saath date pe chalegi? 🥺💘</h2>
+        <div class="question-buttons" id="questionBtns">
+            <button class="yes-btn" id="yesBtn">HAAN! Chalte hai! 🥰</button>
+            <button class="no-btn" id="noBtn">Nahi...</button>
+        </div>
+    </section>
+
+    <!-- ===== SECTION 5: CELEBRATION ===== -->
+    <section class="celebration" id="celebration">
+        <h1>LET'S GOOO! 🎉💕</h1>
+        <p class="cel-sub">Mujhe pata tha tu haan bolegi!! Aaj main sabse khush insaan hu 🥹</p>
+        <div class="bear-hug">🫂</div>
+        <div class="date-plans">
+            <h3>Humara Date Plan 📝</h3>
+            <p>
+                🍦 Step 1: Pehle teri fav ice cream lenge<br>
+                🤗 Step 2: Phir bohot saare cuddles<br>
+                🎬 Step 3: Kuch cute sa saath mein dekhenge<br>
+                🌙 Step 4: Yaadgaar raat banayenge<br>
+                💕 Step 5: Ye sab repeat — forever
+            </p>
+        </div>
+        <p class="closing">Jaldi milte hai, Rasmalai 🤍</p>
+    </section>
+
+    <script>
+        // ========== TYPEWRITER EFFECT ==========
+        const typewriterEl = document.getElementById('typewriter');
+        const subtitle = document.getElementById('subtitle');
+        const tapBtn = document.getElementById('tapBtn');
+        const text = "Heyy Rasmalai... 💕";
+        let charIndex = 0;
+
+        // Add cursor
+        const cursor = document.createElement('span');
+        cursor.classList.add('cursor');
+        cursor.innerHTML = '&nbsp;';
+        typewriterEl.appendChild(cursor);
+
+        function typeWriter() {
+            if (charIndex < text.length) {
+                // Handle multi-byte emoji characters
+                const char = text[charIndex];
+                const codePoint = text.codePointAt(charIndex);
+                let displayChar = char;
+
+                // Check if this is a surrogate pair (emoji)
+                if (codePoint > 0xFFFF) {
+                    displayChar = String.fromCodePoint(codePoint);
+                    charIndex += 2;
+                } else {
+                    charIndex++;
+                }
+
+                typewriterEl.insertBefore(document.createTextNode(displayChar), cursor);
+                setTimeout(typeWriter, 100);
+            } else {
+                // Typing done — show subtitle and button
+                cursor.style.display = 'none';
+                subtitle.classList.add('visible');
+                setTimeout(() => tapBtn.classList.add('visible'), 800);
+            }
+        }
+
+        // Start typewriter after a short delay
+        setTimeout(typeWriter, 600);
+
+        // ========== SMOOTH SCROLL ==========
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ========== SCROLL REVEAL (Intersection Observer) ==========
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Stagger the animations
+                    const delay = Array.from(entry.target.parentElement.children)
+                        .filter(c => c.classList.contains('reveal'))
+                        .indexOf(entry.target) * 150;
+
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, delay);
+
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ========== THE QUESTION — REVEAL ==========
+        const questionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    questionObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const questionText = document.getElementById('questionText');
+        questionObserver.observe(questionText);
+
+        // ========== NO BUTTON — RUNS AWAY ==========
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        let escapeCount = 0;
+        const noMessages = [
+            "Nahi...",
+            "Sach mein? 🥺",
+            "Soch le phirse... 💔",
+            "Pleaseee yaar? 🥺🥺",
+            "Extra scoops dunga! 🍦",
+            "Chal theek hai... 😢"
+        ];
+
+        function escapeNoBtn() {
+            escapeCount++;
+            noBtn.classList.add('escaped');
+
+            // Update text
+            if (escapeCount < noMessages.length) {
+                noBtn.textContent = noMessages[escapeCount];
+            }
+
+            // Shrink progressively
+            const shrink = Math.max(0.6, 1 - escapeCount * 0.08);
+            noBtn.style.fontSize = (shrink * 14) + 'px';
+            noBtn.style.padding = `${shrink * 12}px ${shrink * 28}px`;
+
+            // Move to random position
+            const btnW = noBtn.offsetWidth;
+            const btnH = noBtn.offsetHeight;
+            const maxX = window.innerWidth - btnW - 20;
+            const maxY = window.innerHeight - btnH - 20;
+            noBtn.style.left = Math.max(20, Math.random() * maxX) + 'px';
+            noBtn.style.top = Math.max(20, Math.random() * maxY) + 'px';
+
+            // After too many attempts, just hide it
+            if (escapeCount >= 5) {
+                setTimeout(() => {
+                    noBtn.style.opacity = '0';
+                    setTimeout(() => noBtn.style.display = 'none', 400);
+                }, 300);
+            }
+
+            // Meanwhile, grow the YES button
+            const grow = 1 + escapeCount * 0.05;
+            yesBtn.style.transform = `scale(${grow})`;
+        }
+
+        // Works on both desktop (hover) and mobile (touch)
+        noBtn.addEventListener('mouseover', escapeNoBtn);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            escapeNoBtn();
+        });
+
+        // ========== YES BUTTON ==========
+        yesBtn.addEventListener('click', () => {
+            // Hide the question section
+            document.getElementById('question').style.display = 'none';
+            noBtn.style.display = 'none';
+
+            // Show celebration
+            const cel = document.getElementById('celebration');
+            cel.classList.add('active');
+            cel.scrollIntoView({ behavior: 'smooth' });
+
+            // Fire confetti!
+            createConfetti();
+            // Fire more confetti after a moment
+            setTimeout(createConfetti, 800);
+            setTimeout(createConfetti, 1600);
+        });
+
+        // ========== CONFETTI ==========
+        function createConfetti() {
+            const colors = ['#ff4d6d', '#ff758f', '#ff8fa3', '#ffb3c1', '#ffd60a', '#f3e5f5', '#e8d5f5'];
+            const shapes = ['circle', 'square', 'rectangle'];
+
+            for (let i = 0; i < 80; i++) {
+                const piece = document.createElement('div');
+                piece.classList.add('confetti-piece');
+
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = Math.random() * 10 + 5;
+
+                piece.style.width = size + 'px';
+                piece.style.height = shape === 'rectangle' ? size * 2.5 + 'px' : size + 'px';
+                piece.style.backgroundColor = color;
+                piece.style.borderRadius = shape === 'circle' ? '50%' : '2px';
+                piece.style.left = Math.random() * 100 + 'vw';
+
+                document.body.appendChild(piece);
+
+                const drift = (Math.random() - 0.5) * 300;
+                const duration = Math.random() * 2000 + 2000;
+                const spin = Math.random() * 1080 - 540;
+
+                const animation = piece.animate([
+                    { transform: `translate3d(0, 0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${drift}px, 105vh, 0) rotate(${spin}deg)`, opacity: 0 }
+                ], {
+                    duration: duration,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+
+                animation.onfinish = () => piece.remove();
+            }
+        }
+
+        // ========== FLOATING HEARTS ==========
+        const heartsBg = document.getElementById('heartsBg');
+        const heartEmojis = ['💕', '💗', '💖', '💓', '🩷', '♥️', '💘'];
+
+        function spawnHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (Math.random() * 16 + 12) + 'px';
+            heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            heart.style.animationDelay = '0s';
+            heartsBg.appendChild(heart);
+
+            // Clean up after animation ends
+            const dur = parseFloat(heart.style.animationDuration) * 1000;
+            setTimeout(() => heart.remove(), dur + 100);
+        }
+
+        // Spawn hearts continuously
+        setInterval(spawnHeart, 600);
+        // Initial batch
+        for (let i = 0; i < 5; i++) {
+            setTimeout(spawnHeart, i * 200);
+        }
+    </script>
+</body>
+</html>
